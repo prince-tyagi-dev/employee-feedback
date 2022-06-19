@@ -1,12 +1,12 @@
 interface IEmployee {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   age: number;
   email: string;
   userName: string;
   password: string;
-  reviewerId?: number;
+  reviewerId?: string;
   review: string;
   feedback: string;
   isAdmin: boolean;

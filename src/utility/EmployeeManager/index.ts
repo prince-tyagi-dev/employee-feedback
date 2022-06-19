@@ -6,7 +6,7 @@ import FetchAPI from "../FetchAPI";
 const getEmployeesList = async () => await FetchAPI("Employees");
 
 // To get the single employee record from the JSON server database by its employee id.
-const getEmployeeRecord = async (id: number) =>
+const getEmployeeRecord = async (id: string) =>
   await FetchAPI("Employees/" + id);
 
 // Create/Update Employee record to the JSON server database for the given Employee Id (for update).
@@ -18,7 +18,7 @@ const saveEmployee = async (record: IEmployee) =>
   });
 
 // Delete the Employee record from the JSON server database by using the Employee Id.
-const deleteEmployee = async (id: number) =>
+const deleteEmployee = async (id: string) =>
   await FetchAPI("Employees/" + id, { method: "DELETE" });
 
 export { getEmployeesList, getEmployeeRecord, saveEmployee, deleteEmployee };

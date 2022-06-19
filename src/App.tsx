@@ -5,6 +5,10 @@ function App() {
   return (
     <div className="app-container">
       <Employee moduleName="Employee" />
+      <br />
+      <Employee moduleName="Performance Review" />
+      <br />
+      <Employee moduleName="Feedback" />
     </div>
   );
 }
