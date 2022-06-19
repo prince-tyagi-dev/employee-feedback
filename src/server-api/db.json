@@ -1,0 +1,14 @@
+{
+  "employees": [
+    {
+      "id": "1234567",
+      "firstName": "Prince",
+      "lastName": "Tyagi",
+      "age": "31",
+      "email": "",
+      "userName": "admin",
+      "password": "admin@123",
+      "isAdmin": true
+    }
+  ]
+}
