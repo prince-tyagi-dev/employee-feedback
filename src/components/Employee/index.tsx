@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import IEmployee from "../../Interfaces/Employee";
 import {
   getEmployeesList,
@@ -24,11 +24,9 @@ const Employee = (props: any): JSX.Element => {
   const isPerformanceModule = props.moduleName === "Performance Review";
   const isFeedbackModule = props.moduleName === "Feedback";
 
-  useEffect(() => {
-    bindEmployeesData();
-  }, []);
-
-  const bindEmployeesData = () =>
+  // Bind the Employees grid.
+  const bindEmployeesGrid = useCallback(() => {
+    console.info("useCallback hook render");
     getEmployeesList().then((response) => {
       const employeesArray = response as IEmployee[];
       setEmployees(
@@ -42,7 +40,15 @@ const Employee = (props: any): JSX.Element => {
       );
       setReviewers(employeesArray.filter((emp) => !emp.isAdmin));
     });
-  const bindEmployeeCombos = (isEdit: boolean) => {
+  }, [isPerformanceModule, isFeedbackModule]);
+
+  useEffect(() => {
+    bindEmployeesGrid();
+    console.info("useEffect hook render");
+  }, [bindEmployeesGrid]);
+
+  // Bind the Employees combos.
+  const bindEmployeesCombos = (isEdit: boolean) => {
     getEmployeesList().then((response) => {
       const employeesArray = response as IEmployee[];
       setReviewForEmployees(
@@ -54,45 +60,59 @@ const Employee = (props: any): JSX.Element => {
       setShowModal(true);
     });
   };
+
+  // Bind the Employee current record, eg. selected Employee record to Edit Employee, Add/Edit Performance Review/Feedback.
   const bindEmployeeRecord = (id: string, isEdit: boolean) => {
     getEmployeeRecord(id).then((response) => {
       setEmployeeRecord(response as IEmployee);
       if (isPerformanceModule || isFeedbackModule) {
-        bindEmployeeCombos(true);
+        bindEmployeesCombos(true);
       } else {
         setShowModal(true);
       }
       setIsEditRecord(isEdit);
     });
   };
+
+  // Add module button click handler.
   const handleClickCreate = () => {
     setEmployeeRecord({} as IEmployee);
 
     if (isPerformanceModule) {
-      bindEmployeeCombos(false);
+      bindEmployeesCombos(false);
     } else {
       setShowModal(true);
     }
     setIsEditRecord(false);
   };
-  const handleClickEdit = (id: string) => {
-    bindEmployeeRecord(id, true);
+
+  // Edit module button click handler, eg. Edit the Performance Review, Add/Edit Feedback.
+  const handleClickEdit = (id: string, isEdit: boolean) => {
+    bindEmployeeRecord(id, isEdit);
   };
+
+  // Delete the selected Employee.
   const handleClickDelete = (id: string) => {
-    deleteEmployee(id).then(() => bindEmployeesData());
+    deleteEmployee(id).then(() => bindEmployeesGrid());
   };
+
+  // Form submit handler to Add/Edit the Employe record, Add/Edit the Performance Review/Feedback.
   const handleSubmit = (e: any) => {
     e.preventDefault();
     saveEmployee(employeeRecord).then((response) => {
       console.info("handleSubmit > response: ", response);
       setShowModal(false);
-      bindEmployeesData();
+      bindEmployeesGrid();
     });
   };
+
+  // On change handler for the form fields.
   const handleChange = (e: any) => {
     if (e.target.name === "id") {
       bindEmployeeRecord(e.target.value, false);
     }
+
+    // Save the form fields to the Employee record.
     setEmployeeRecord({
       ...employeeRecord,
       [e.target.name]: e.target.value,
@@ -101,15 +121,21 @@ const Employee = (props: any): JSX.Element => {
 
   return (
     <>
-      <h1>Manage {props.moduleName}</h1>
-      {!isFeedbackModule ? (
-        <button
-          className="btn btn-green btn-add-record"
-          onClick={() => handleClickCreate()}
-        >
-          Add {props.moduleName}
-        </button>
-      ) : null}
+      <div className="row">
+        <div className="column">
+          <h2>Manage {props.moduleName}</h2>
+        </div>
+        <div className="column">
+          {!isFeedbackModule ? (
+            <button
+              className="btn btn-green btn-add-record mar-top-20"
+              onClick={() => handleClickCreate()}
+            >
+              Add {props.moduleName}
+            </button>
+          ) : null}
+        </div>
+      </div>
       <table className="data-grid">
         <thead>
           <tr>
@@ -189,7 +215,12 @@ const Employee = (props: any): JSX.Element => {
                               : "btn-blue"
                             : "btn-blue"
                         }`}
-                        onClick={() => handleClickEdit(emp.id)}
+                        onClick={() =>
+                          handleClickEdit(
+                            emp.id,
+                            !isFeedbackModule || isValid(emp.feedback)
+                          )
+                        }
                       >
                         {isFeedbackModule
                           ? !isValid(emp.feedback)
@@ -313,7 +344,7 @@ const Employee = (props: any): JSX.Element => {
                       value={employeeRecord.id}
                       onChange={handleChange}
                       required
-                      disabled={isEditRecord}
+                      disabled={isEditRecord || isFeedbackModule}
                     >
                       <option value="">Select</option>
                       {reviewForEmployees.map((emp, index) => (
@@ -346,7 +377,7 @@ const Employee = (props: any): JSX.Element => {
                 </div>
                 <div className="row">
                   <div className="column">
-                    <label>Perofrmance Review</label>
+                    <label>Performance Review</label>
                     <textarea
                       name="review"
                       value={employeeRecord.review}
