@@ -1,13 +1,17 @@
+import "./index.css";
+
 const Modal = ({
   title,
   children,
   isOpen,
   toggle,
+  showFooter,
 }: {
   title: string;
   children: JSX.Element;
   isOpen: boolean;
   toggle: any;
+  showFooter?: boolean;
 }): JSX.Element => {
   return (
     <>
@@ -21,7 +25,7 @@ const Modal = ({
               <h2>{title}</h2>
             </div>
             <div className="modal-body">{children}</div>
-            <div className="modal-footer"></div>
+            {showFooter ? <div className="modal-footer"></div> : null}
           </div>
         </div>
       ) : null}
