@@ -1,0 +1,7 @@
+.welcome-name {
+  text-align: center;
+  margin-top: 20%;
+}
+.welcome-name > span {
+  font-size: 30px;
+}

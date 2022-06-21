@@ -1,22 +1,40 @@
 import "./App.css";
 import Employee from "./components/Employee";
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Login from "./components/Login";
 import { connect } from "react-redux";
-import { IAppProps, IState } from "./redux/interfaces";
+import { IReducer } from "./redux/interfaces";
 import IEmployee from "./Interfaces/Employee";
-import { getLoginInfo, setLoginInfo } from "./utility/Common";
+import {
+  getLoginInfo,
+  getModuleName,
+  mergeStrings,
+  setLoginInfo,
+} from "./utility/Common";
 import { saveLoginInfo } from "./redux/actions";
+import Home from "./components/Home";
+import { useState } from "react";
+import history from "./utility/History";
+import IKeyValuePair from "./Interfaces/IKeyValuePair";
+import {
+  EMPLOYEE,
+  FEEDBACK,
+  HOME,
+  LOGOUT,
+  PERFORMANCE_REVIEW,
+} from "./utility/Modules";
 
-function App(props: IAppProps) {
-  const handleClick = () => {
-    setLoginInfo({} as IEmployee);
-    props.saveLoginInfo({} as IEmployee);
-    window.location.href = "http://localhost:3000/#/login";
-    window.location.reload();
+function App(props: IKeyValuePair) {
+  const [moduleName, setModuleName] = useState(getModuleName());
+
+  const handleClickLogout = () => {
+    const employee = {} as IEmployee;
+    setLoginInfo(employee);
+    props.saveLoginInfo(employee);
+    setModuleName(LOGOUT);
+    history.push("/");
   };
-
-  let emplpyee: IEmployee = getLoginInfo();
+  let employee: IEmployee = getLoginInfo();
 
   return (
     <Router>
@@ -24,8 +42,16 @@ function App(props: IAppProps) {
         <input type="checkbox" id="nav-check" />
         <div className="nav-header">
           <div className="nav-title">Employee Management System</div>
+          <span>
+            {employee?.userName
+              ? `Login by "${mergeStrings(
+                  employee.firstName,
+                  employee.lastName
+                )}" as ${employee.isAdmin ? "Admin" : "Employee"}`
+              : ""}
+          </span>
         </div>
-        {emplpyee?.userName ? (
+        {employee?.userName ? (
           <>
             <div className="nav-btn">
               <label htmlFor="nav-check">
@@ -35,16 +61,26 @@ function App(props: IAppProps) {
               </label>
             </div>
             <div className="nav-links">
-              {emplpyee.isAdmin ? (
+              <Link to="/home">Home</Link>
+              {employee.isAdmin ? (
                 <>
-                  <Link to="/employee">Employee</Link>
-                  <Link to="/review">Performance Review</Link>
+                  <Link to="/employee" onClick={() => setModuleName(EMPLOYEE)}>
+                    Employee
+                  </Link>
+                  <Link
+                    to="/review"
+                    onClick={() => setModuleName(PERFORMANCE_REVIEW)}
+                  >
+                    Performance Review
+                  </Link>
                 </>
-              ) : // Employee view
-              emplpyee?.userName ? (
-                <Link to="/feedback">Feedback</Link>
-              ) : null}
-              <Link to="/login" onClick={handleClick} className="btn-logout">
+              ) : (
+                // Employee view
+                <Link to="/feedback" onClick={() => setModuleName(FEEDBACK)}>
+                  Feedback
+                </Link>
+              )}
+              <Link to="/" onClick={handleClickLogout} className="btn-logout">
                 Logout
               </Link>
             </div>
@@ -54,35 +90,44 @@ function App(props: IAppProps) {
 
       <div className="app-container">
         <Routes>
-          <Route path="/login" element={<Login />} />
-
-          {/* Admin view */}
-          {emplpyee.isAdmin ? (
+          {employee?.userName ? (
             <>
-              <Route
-                path="/employee"
-                element={<Employee moduleName="Employee" />}
-              />
-              <Route
-                path="/review"
-                element={<Employee moduleName="Performance Review" />}
-              />
+              <Route path="/home" element={<Home user={employee} />} />
+
+              {/* Admin view */}
+              {employee.isAdmin ? (
+                <>
+                  <Route
+                    path="/employee"
+                    element={<Employee moduleName={moduleName} />}
+                  />
+                  <Route
+                    path="/review"
+                    element={<Employee moduleName={moduleName} />}
+                  />
+                </>
+              ) : (
+                //  Employee view
+                <Route
+                  path="/feedback"
+                  element={<Employee moduleName={moduleName} />}
+                />
+              )}
             </>
-          ) : // Employee view
-          emplpyee?.userName ? (
+          ) : (
             <Route
-              path="/feedback"
-              element={<Employee moduleName="Feedback" />}
+              path="/"
+              element={<Login loginCallBack={() => setModuleName(HOME)} />}
             />
-          ) : null}
+          )}
         </Routes>
       </div>
     </Router>
   );
 }
 
-const mapStateToProps = (state: IState) => {
-  return { user: state.user };
+const mapStateToProps = (state: IReducer) => {
+  return { user: state.login.user };
 };
 const mapDispatchToProps = (dispatch: any) => {
   return {

@@ -20,6 +20,11 @@
   padding: 10px 10px 10px 10px;
 }
 
+.nav > .nav-header > span {
+  color: #13fae0;
+  margin-left: 2%;
+}
+
 .nav > .nav-btn {
   display: none;
 }

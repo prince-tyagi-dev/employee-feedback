@@ -9,8 +9,9 @@ import {
 import "./index.css";
 import Modal from "../Modal";
 import { isValid, mergeStrings } from "../../utility/Common";
+import IKeyValuePair from "../../Interfaces/IKeyValuePair";
 
-const Employee = (props: any): JSX.Element => {
+const Employee = (props: IKeyValuePair): JSX.Element => {
   const [employees, setEmployees] = useState<IEmployee[]>([]);
   const [reviewers, setReviewers] = useState<IEmployee[]>([]);
   const [reviewForEmployees, setReviewForEmployees] = useState<IEmployee[]>([]);

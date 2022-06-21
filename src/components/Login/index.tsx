@@ -5,26 +5,32 @@ import ILogin from "../../Interfaces/ILogin";
 import { saveLoginInfo } from "../../redux/actions";
 import { getEmployeeByCredentials } from "../../utility/LoginManager";
 import "./index.css";
-import { IAppProps, IState } from "../../redux/interfaces";
+import { IState } from "../../redux/interfaces";
 import { setLoginInfo } from "../../utility/Common";
+import history from "../../utility/History";
+import IKeyValuePair from "../../Interfaces/IKeyValuePair";
 
-const Login = (props: IAppProps): JSX.Element => {
+interface ILoginProps extends IKeyValuePair {
+  loginCallBack?: Function;
+}
+
+const Login = (props: ILoginProps): JSX.Element => {
   const [loginData, setLoginData] = useState({} as ILogin);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    getEmployeeByCredentials(loginData.userName, loginData.password).then(
-      (response: any) => {
-        debugger;
-        console.info("getEmployeeByCredentials > response: ", response);
 
+    // Get Employee record form the JSON Server Database for the given username and password.
+    await getEmployeeByCredentials(loginData.userName, loginData.password).then(
+      (response: any) => {
         if (response && response.length) {
           const employee = response[0] as IEmployee;
           setLoginInfo(employee);
           props.saveLoginInfo(employee);
-          window.location.href = `http://localhost:3000/#/${
-            employee.isAdmin ? "employee" : "feedback"
-          }`;
+          if (props.loginCallBack) {
+            props.loginCallBack();
+          }
+          history.push("/home");
           window.location.reload();
         }
       }
@@ -37,7 +43,7 @@ const Login = (props: IAppProps): JSX.Element => {
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
-      <h4>Eneter the username and password to login into the system.</h4>
+      <h4>Enter the username and password for login to the system.</h4>
       <div className="row">
         <div className="column">
           <input
