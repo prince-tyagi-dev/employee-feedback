@@ -1,4 +1,4 @@
-import IKeyValuePair from "../../Interfaces/IKeyValuePair";
+import { IKeyValuePair } from "../../Interfaces/Common";
 import { mergeStrings } from "../../utility/Common";
 import "./index.css";
 

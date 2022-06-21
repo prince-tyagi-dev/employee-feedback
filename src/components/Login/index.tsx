@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { connect } from "react-redux";
 import IEmployee from "../../Interfaces/Employee";
-import ILogin from "../../Interfaces/ILogin";
+import { ILogin, IKeyValuePair } from "../../Interfaces/Common";
 import { saveLoginInfo } from "../../redux/actions";
 import { getEmployeeByCredentials } from "../../utility/LoginManager";
 import "./index.css";
-import { IState } from "../../redux/interfaces";
+import { IState } from "../../Interfaces/Common";
 import { setLoginInfo } from "../../utility/Common";
 import history from "../../utility/History";
-import IKeyValuePair from "../../Interfaces/IKeyValuePair";
 
 interface ILoginProps extends IKeyValuePair {
   loginCallBack?: Function;
@@ -27,6 +26,7 @@ const Login = (props: ILoginProps): JSX.Element => {
           const employee = response[0] as IEmployee;
           setLoginInfo(employee);
           props.saveLoginInfo(employee);
+
           if (props.loginCallBack) {
             props.loginCallBack();
           }

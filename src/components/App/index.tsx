@@ -1,28 +1,27 @@
-import "./App.css";
-import Employee from "./components/Employee";
+import "./index.css";
+import Employee from "../Employee";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Login from "./components/Login";
+import Login from "../Login";
 import { connect } from "react-redux";
-import { IReducer } from "./redux/interfaces";
-import IEmployee from "./Interfaces/Employee";
+import { IReducer, IKeyValuePair } from "../../Interfaces/Common";
+import IEmployee from "../../Interfaces/Employee";
 import {
   getLoginInfo,
   getModuleName,
   mergeStrings,
   setLoginInfo,
-} from "./utility/Common";
-import { saveLoginInfo } from "./redux/actions";
-import Home from "./components/Home";
+} from "../../utility/Common";
+import { saveLoginInfo } from "../../redux/actions";
+import Home from "../Home";
 import { useState } from "react";
-import history from "./utility/History";
-import IKeyValuePair from "./Interfaces/IKeyValuePair";
+import history from "../../utility/History";
 import {
   EMPLOYEE,
   FEEDBACK,
   HOME,
   LOGOUT,
   PERFORMANCE_REVIEW,
-} from "./utility/Modules";
+} from "../../utility/Modules";
 
 function App(props: IKeyValuePair) {
   const [moduleName, setModuleName] = useState(getModuleName());

@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { IReducer } from "../../interfaces";
+import { IReducer } from "../../../Interfaces/Common";
 import loginReducer from "../loginReducer";
 
 const reducersInfo: IReducer = { login: loginReducer };

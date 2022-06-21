@@ -1,7 +1,7 @@
-import { IAction, IState } from "../../interfaces";
+import { IAction, IState } from "../../../Interfaces/Common";
 import { LOGIN } from "../../types";
 
-const initialState = {} as IState;
+const initialState = { user: {} } as IState;
 
 const loginReducer = (state: IState = initialState, action: IAction) => {
   const { type, payload } = action;
