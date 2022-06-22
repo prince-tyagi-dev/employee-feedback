@@ -26,7 +26,7 @@ Go to the path: `src/server-api`, run this command: `yarn start`, it will run th
 Open [http://localhost:3001](http://localhost:3001) to view the JSON Server page in the browser.\
 Open [http://localhost:3001/employees](http://localhost:3001/employees) to view the Employees data in the JSON format.
 
-### `yarn test`
+### `yarn test src`
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
