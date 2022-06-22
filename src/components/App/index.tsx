@@ -22,8 +22,9 @@ import {
   LOGOUT,
   PERFORMANCE_REVIEW,
 } from "../../utility/Modules";
+import enums from "../../utility/Enums";
 
-function App(props: IKeyValuePair) {
+function App(props: any) {
   const [moduleName, setModuleName] = useState(getModuleName());
 
   const handleClickLogout = () => {
@@ -40,9 +41,9 @@ function App(props: IKeyValuePair) {
       <div className="nav">
         <input type="checkbox" id="nav-check" />
         <div className="nav-header">
-          <div className="nav-title">Employee Management System</div>
+          <div className="nav-title">{enums.msg.appHeaderTitle}</div>
           <span>
-            {employee?.userName
+            {employee?.username
               ? `Login by "${mergeStrings(
                   employee.firstName,
                   employee.lastName
@@ -50,7 +51,7 @@ function App(props: IKeyValuePair) {
               : ""}
           </span>
         </div>
-        {employee?.userName ? (
+        {employee?.username ? (
           <>
             <div className="nav-btn">
               <label htmlFor="nav-check">
@@ -89,7 +90,7 @@ function App(props: IKeyValuePair) {
 
       <div className="app-container">
         <Routes>
-          {employee?.userName ? (
+          {employee?.username ? (
             <>
               <Route path="/home" element={<Home user={employee} />} />
 

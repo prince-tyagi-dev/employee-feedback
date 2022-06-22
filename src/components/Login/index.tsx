@@ -8,6 +8,7 @@ import "./index.css";
 import { IState } from "../../Interfaces/Common";
 import { setLoginInfo } from "../../utility/Common";
 import history from "../../utility/History";
+import enums from "../../utility/Enums";
 
 interface ILoginProps extends IKeyValuePair {
   loginCallBack?: Function;
@@ -20,7 +21,7 @@ const Login = (props: ILoginProps): JSX.Element => {
     e.preventDefault();
 
     // Get Employee record form the JSON Server Database for the given username and password.
-    await getEmployeeByCredentials(loginData.userName, loginData.password).then(
+    await getEmployeeByCredentials(loginData.username, loginData.password).then(
       (response: any) => {
         if (response && response.length) {
           const employee = response[0] as IEmployee;
@@ -43,14 +44,14 @@ const Login = (props: ILoginProps): JSX.Element => {
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
-      <h4>Enter the username and password for login to the system.</h4>
+      <h4>{enums.msg.loginSteps}</h4>
       <div className="row">
         <div className="column">
           <input
             type="text"
-            name="userName"
+            name="username"
             placeholder="Enter the username"
-            value={loginData.userName}
+            value={loginData.username}
             onChange={handleChange}
             required
           />

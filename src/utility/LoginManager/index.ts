@@ -1,7 +1,7 @@
 import FetchAPI from "../FetchAPI";
 
-// Get the employee from the JSON server database for the given userName and password.
-const getEmployeeByCredentials = async (userName: string, password: string) =>
-  await FetchAPI(`Employees?userName=${userName}&password=${password}`);
+// Get the employee from the JSON server database for the given username and password.
+const getEmployeeByCredentials = async (username: string, password: string) =>
+  await FetchAPI(`Employees?username=${username}&password=${password}`);
 
 export { getEmployeeByCredentials };

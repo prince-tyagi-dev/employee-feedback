@@ -21,6 +21,6 @@ export interface IKeyValuePair {
   [key: string]: any;
 }
 export interface ILogin {
-  userName: string;
+  username: string;
   password: string;
 }

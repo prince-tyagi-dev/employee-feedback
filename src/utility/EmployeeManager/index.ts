@@ -21,14 +21,14 @@ const saveEmployee = async (record: IEmployee) =>
 const deleteEmployee = async (id: string) =>
   await FetchAPI("Employees/" + id, { method: "DELETE" });
 
-// Get the employee from the JSON server database for the given userName.
-const getEmployeeByUserName = async (userName: string) =>
-  await FetchAPI(`Employees?userName=${userName}`);
+// Get the employee from the JSON server database for the given username.
+const getEmployeeByUsername = async (username: string) =>
+  await FetchAPI(`Employees?username=${username}`);
 
 export {
   getEmployeesList,
   getEmployeeRecord,
   saveEmployee,
   deleteEmployee,
-  getEmployeeByUserName,
+  getEmployeeByUsername,
 };

@@ -5,12 +5,13 @@ import {
   getEmployeeRecord,
   saveEmployee,
   deleteEmployee,
-  getEmployeeByUserName,
+  getEmployeeByUsername,
 } from "../../utility/EmployeeManager";
 import "./index.css";
 import Modal from "../../components/Modal";
 import { isValid, mergeStrings } from "../../utility/Common";
 import { IKeyValuePair } from "../../Interfaces/Common";
+import enums from "../../utility/Enums";
 
 const Employee = (props: IKeyValuePair): JSX.Element => {
   const [employees, setEmployees] = useState<IEmployee[]>([]);
@@ -105,11 +106,11 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    await getEmployeeByUserName(employeeRecord.userName).then((response) => {
+    await getEmployeeByUsername(employeeRecord.username).then((response) => {
       const emp = response as IEmployee[];
 
       if (emp.length && employeeRecord.id !== emp[0].id) {
-        setMessage("Username already in use, please try a different username.");
+        setMessage(enums.msg.duplicateUsername);
       } else {
         setMessage("");
 
@@ -133,7 +134,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
     setEmployeeRecord({
       ...employeeRecord,
       [e.target.name]:
-        e.target.name === "userName" || e.target.name === "email"
+        e.target.name === "username" || e.target.name === "email"
           ? e.target.value.toLowerCase()
           : e.target.value,
     });
@@ -207,7 +208,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                         <td>{emp.lastName}</td>
                         <td>{emp.age}</td>
                         <td>{emp.email}</td>
-                        <td>{emp.userName}</td>
+                        <td>{emp.username}</td>
                         <td>{emp.password}</td>
                       </>
                     ) : (
@@ -335,8 +336,8 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                     <label>Username</label>
                     <input
                       type="text"
-                      name="userName"
-                      value={employeeRecord.userName}
+                      name="username"
+                      value={employeeRecord.username}
                       onChange={handleChange}
                       required
                     />

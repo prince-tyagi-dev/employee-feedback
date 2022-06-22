@@ -4,7 +4,7 @@ interface IEmployee {
   lastName: string;
   age: number;
   email: string;
-  userName: string;
+  username: string;
   password: string;
   reviewerId?: string;
   review: string;
