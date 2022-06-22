@@ -20,6 +20,7 @@ const processLogin = async (props: IKeyValuePair, loginData: ILogin) => {
           props.loginCallBack({ target: { href: window.location.href } });
         }
         history.push("/");
+        window.location.reload();
       }
     }
   );

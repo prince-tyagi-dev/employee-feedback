@@ -9,7 +9,7 @@ import {
 } from "../../utility/EmployeeManager";
 import "./index.css";
 import Modal from "../../components/Modal";
-import { isValid, mergeStrings } from "../../utility/Common";
+import { getLoginInfo, isValid, mergeStrings } from "../../utility/Common";
 import { IKeyValuePair } from "../../Interfaces/Common";
 import enums from "../../utility/Enums";
 
@@ -27,24 +27,29 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
   const isEmpoloyeeModule = props.moduleName === "Employee";
   const isPerformanceModule = props.moduleName === "Performance Review";
   const isFeedbackModule = props.moduleName === "Feedback";
+  const loginEmployee = getLoginInfo();
 
   // Bind the Employees grid.
   const bindEmployeesGrid = useCallback(() => {
     console.info("useCallback hook render");
     getEmployeesList().then((response) => {
       const employeesArray = response as IEmployee[];
+      debugger;
       setEmployees(
         employeesArray.filter(
           (emp) =>
             !emp.isAdmin &&
-            (isPerformanceModule || isFeedbackModule
+            (isPerformanceModule
               ? isValid(emp.review)
+              : isFeedbackModule
+              ? emp.reviewerId?.toString() === loginEmployee.id.toString() &&
+                isValid(emp.review)
               : true)
         )
       );
       setReviewers(employeesArray.filter((emp) => !emp.isAdmin));
     });
-  }, [isPerformanceModule, isFeedbackModule]);
+  }, [isPerformanceModule, isFeedbackModule, loginEmployee.id]);
 
   useEffect(() => {
     bindEmployeesGrid();
