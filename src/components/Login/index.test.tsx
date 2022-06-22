@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import Login from "./";
 
-test("renders learn react link", () => {
+test("Check the Login button on the Login screen", () => {
   render(<Login />);
   const loginElement = screen.getByText("Login");
   expect(loginElement).toBeInTheDocument();
