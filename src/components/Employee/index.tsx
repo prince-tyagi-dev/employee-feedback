@@ -5,6 +5,7 @@ import {
   getEmployeeRecord,
   saveEmployee,
   deleteEmployee,
+  getEmployeeByUserName,
 } from "../../utility/EmployeeManager";
 import "./index.css";
 import Modal from "../../components/Modal";
@@ -20,6 +21,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
   );
   const [showModal, setShowModal] = useState(false);
   const [isEditRecord, setIsEditRecord] = useState(false);
+  const [message, setMessage] = useState("");
 
   const isEmpoloyeeModule = props.moduleName === "Employee";
   const isPerformanceModule = props.moduleName === "Performance Review";
@@ -85,11 +87,13 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
       setShowModal(true);
     }
     setIsEditRecord(false);
+    setMessage("");
   };
 
   // Edit module button click handler, eg. Edit the Performance Review, Add/Edit Feedback.
   const handleClickEdit = (id: string, isEdit: boolean) => {
     bindEmployeeRecord(id, isEdit);
+    setMessage("");
   };
 
   // Delete the selected Employee.
@@ -98,12 +102,24 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
   };
 
   // Form submit handler to Add/Edit the Employe record, Add/Edit the Performance Review/Feedback.
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    saveEmployee(employeeRecord).then((response) => {
-      console.info("handleSubmit > response: ", response);
-      setShowModal(false);
-      bindEmployeesGrid();
+
+    await getEmployeeByUserName(employeeRecord.userName).then((response) => {
+      const emp = response as IEmployee[];
+
+      if (emp.length && employeeRecord.id !== emp[0].id) {
+        setMessage("Username already in use, please try a different username.");
+      } else {
+        setMessage("");
+
+        // Save Employee record to the JSON Server Database.
+        saveEmployee(employeeRecord).then((response) => {
+          console.info("handleSubmit > response: ", response);
+          setShowModal(false);
+          bindEmployeesGrid();
+        });
+      }
     });
   };
 
@@ -116,7 +132,10 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
     // Save the form fields to the Employee record.
     setEmployeeRecord({
       ...employeeRecord,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.name === "userName" || e.target.name === "email"
+          ? e.target.value.toLowerCase()
+          : e.target.value,
     });
   };
 
@@ -321,6 +340,9 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                       onChange={handleChange}
                       required
                     />
+                    {message ? (
+                      <span className="submit-msg">{message}</span>
+                    ) : null}
                   </div>
                   <div className="column">
                     <label>Password</label>

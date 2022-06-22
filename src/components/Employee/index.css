@@ -126,3 +126,8 @@ label {
 .mar-top-20 {
   margin-top: 20px;
 }
+
+.submit-msg {
+  color: red;
+  font-size: 14px;
+}
