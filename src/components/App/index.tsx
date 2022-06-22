@@ -2,39 +2,32 @@ import "./index.css";
 import Employee from "../Employee";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Login from "../Login";
-import { connect } from "react-redux";
-import { IReducer, IKeyValuePair } from "../../Interfaces/Common";
-import IEmployee from "../../Interfaces/Employee";
 import {
   getLoginInfo,
   getModuleName,
   mergeStrings,
   setLoginInfo,
 } from "../../utility/Common";
-import { saveLoginInfo } from "../../redux/actions";
 import Home from "../Home";
 import { useState } from "react";
 import history from "../../utility/History";
-import {
-  EMPLOYEE,
-  FEEDBACK,
-  HOME,
-  LOGOUT,
-  PERFORMANCE_REVIEW,
-} from "../../utility/Modules";
+import { LOGOUT } from "../../utility/Modules";
 import enums from "../../utility/Enums";
 
-function App(props: IKeyValuePair) {
+function App() {
   const [moduleName, setModuleName] = useState(getModuleName());
 
   const handleClickLogout = () => {
-    const employee = {} as IEmployee;
-    setLoginInfo(employee);
-    props.saveLoginInfo(employee);
+    setLoginInfo(null);
     setModuleName(LOGOUT);
     history.push("/");
   };
-  let employee: IEmployee = getLoginInfo();
+  const handleClickLink = (e: any) => {
+    const moduleName = getModuleName(e.target.href);
+    setModuleName(moduleName);
+  };
+
+  let employee = getLoginInfo();
 
   return (
     <Router>
@@ -61,22 +54,19 @@ function App(props: IKeyValuePair) {
               </label>
             </div>
             <div className="nav-links">
-              <Link to="/home">Home</Link>
+              <Link to="/">Home</Link>
               {employee.isAdmin ? (
                 <>
-                  <Link to="/employee" onClick={() => setModuleName(EMPLOYEE)}>
+                  <Link to="/employee" onClick={handleClickLink}>
                     Employee
                   </Link>
-                  <Link
-                    to="/review"
-                    onClick={() => setModuleName(PERFORMANCE_REVIEW)}
-                  >
+                  <Link to="/review" onClick={handleClickLink}>
                     Performance Review
                   </Link>
                 </>
               ) : (
                 // Employee view
-                <Link to="/feedback" onClick={() => setModuleName(FEEDBACK)}>
+                <Link to="/feedback" onClick={handleClickLink}>
                   Feedback
                 </Link>
               )}
@@ -92,7 +82,7 @@ function App(props: IKeyValuePair) {
         <Routes>
           {employee?.username ? (
             <>
-              <Route path="/home" element={<Home user={employee} />} />
+              <Route path="/" element={<Home user={employee} />} />
 
               {/* Admin view */}
               {employee.isAdmin ? (
@@ -117,7 +107,7 @@ function App(props: IKeyValuePair) {
           ) : (
             <Route
               path="/"
-              element={<Login loginCallBack={() => setModuleName(HOME)} />}
+              element={<Login loginCallBack={handleClickLink} />}
             />
           )}
         </Routes>
@@ -126,13 +116,4 @@ function App(props: IKeyValuePair) {
   );
 }
 
-const mapStateToProps = (state: IReducer) => {
-  return { user: state.login.user };
-};
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    saveLoginInfo: (employee: IEmployee) => dispatch(saveLoginInfo(employee)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

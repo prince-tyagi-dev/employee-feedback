@@ -21,7 +21,7 @@ const isValid = (value: string): boolean => {
 const mergeStrings = (...strings: string[]): string => strings.join(" ");
 
 // Set the login information to the Session Storage.
-const setLoginInfo = (employee: IEmployee) => {
+const setLoginInfo = (employee?: IEmployee | null) => {
   sessionStorage.setItem("LOGINUSER", JSON.stringify(employee));
 };
 
@@ -31,15 +31,16 @@ const getLoginInfo = (): IEmployee => {
 };
 
 // Get the module name from the requesting url.
-const getModuleName = (): string => {
-  const url = window.location.href;
+const getModuleName = (requestUrl?: string): string => {
+  const url = requestUrl || window.location.href;
+
   return url.indexOf("employee") !== -1
     ? EMPLOYEE
     : url.indexOf("review") !== -1
     ? PERFORMANCE_REVIEW
     : url.indexOf("feedback") !== -1
     ? FEEDBACK
-    : url.indexOf("home") !== -1
+    : url.endsWith("/")
     ? HOME
     : LOGOUT;
 };

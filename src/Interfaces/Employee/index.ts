@@ -1,11 +1,11 @@
-interface IEmployee {
+import { ILogin } from "../Common";
+
+interface IEmployee extends ILogin {
   id: string;
   firstName: string;
   lastName: string;
   age: number;
   email: string;
-  username: string;
-  password: string;
   reviewerId?: string;
   review: string;
   feedback: string;

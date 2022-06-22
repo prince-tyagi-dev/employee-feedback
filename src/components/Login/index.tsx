@@ -1,41 +1,15 @@
 import { useState } from "react";
-import { connect } from "react-redux";
-import IEmployee from "../../Interfaces/Employee";
-import { ILogin, IKeyValuePair } from "../../Interfaces/Common";
-import { saveLoginInfo } from "../../redux/actions";
-import { getEmployeeByCredentials } from "../../utility/LoginManager";
+import { ILogin, ILoginProps } from "../../Interfaces/Common";
+import { processLogin } from "../../utility/LoginManager";
 import "./index.css";
-import { IState } from "../../Interfaces/Common";
-import { setLoginInfo } from "../../utility/Common";
-import history from "../../utility/History";
 import enums from "../../utility/Enums";
-
-interface ILoginProps extends IKeyValuePair {
-  loginCallBack?: Function;
-}
 
 const Login = (props: ILoginProps): JSX.Element => {
   const [loginData, setLoginData] = useState({} as ILogin);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
-    // Get Employee record form the JSON Server Database for the given username and password.
-    await getEmployeeByCredentials(loginData.username, loginData.password).then(
-      (response: any) => {
-        if (response && response.length) {
-          const employee = response[0] as IEmployee;
-          setLoginInfo(employee);
-          props.saveLoginInfo(employee);
-
-          if (props.loginCallBack) {
-            props.loginCallBack();
-          }
-          history.push("/home");
-          window.location.reload();
-        }
-      }
-    );
+    processLogin(props, loginData);
   };
 
   const handleChange = (e: any) => {
@@ -80,13 +54,4 @@ const Login = (props: ILoginProps): JSX.Element => {
   );
 };
 
-const mapStateToProps = (state: IState) => {
-  return { user: state.user };
-};
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    saveLoginInfo: (employee: IEmployee) => dispatch(saveLoginInfo(employee)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

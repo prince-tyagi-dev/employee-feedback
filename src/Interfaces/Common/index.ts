@@ -24,3 +24,6 @@ export interface ILogin {
   username: string;
   password: string;
 }
+export interface ILoginProps extends IKeyValuePair {
+  loginCallBack?: Function;
+}
