@@ -24,7 +24,7 @@ import {
 } from "../../utility/Modules";
 import enums from "../../utility/Enums";
 
-function App(props: any) {
+function App(props: IKeyValuePair) {
   const [moduleName, setModuleName] = useState(getModuleName());
 
   const handleClickLogout = () => {
