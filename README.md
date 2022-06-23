@@ -4,19 +4,19 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Project Requirement
 
-As per the assessment document `Frontend Assignment - Employee CRUD.pdf`, there should be Admin and Employee panels, both can log in to the system with the below features:\
+As per the assessment document `Frontend Assignment - Employee CRUD.pdf`, there should be Admin and Employee panels, both can log in to the system with the below features:
 
-Admin:
-* Admin can log in to the system using its credentials and see the below pages.\
-* Manage Employee page with Add/Edit/Delete actions.\
+### Admin:
+* Admin can log in to the system using its credentials and see the below pages.
+* Manage Employee page with Add/Edit/Delete actions.
 * Manage the Performance Review page to add the performance review for the employees.\
 Admin can assign the performance review to a particular Employee (as a Reviewer).
 
-Employee:
+### Employee:
 * Manage the Feedback page, where all the assigned performance Reviews will be visible to provide the Feedback, there will be the Add/Edit option to provide the Feedback.
 * Employee can log in to the system using its credentials.
 
-Validations:
+### Validations:
 * There will be some basic validations of required and type, eg. To save an Employee information, there will be some required fields: `First Name,
 Last Name, Age, Email, Username, Password`.
 * To save the Performance Review, there will be the required validation for the Performance Review.
