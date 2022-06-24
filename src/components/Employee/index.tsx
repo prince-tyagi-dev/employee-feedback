@@ -34,7 +34,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
     console.info("useCallback hook render");
     getEmployeesList().then((response) => {
       const employeesArray = response as IEmployee[];
-      debugger;
+
       setEmployees(
         employeesArray.filter(
           (emp) =>
