@@ -25,10 +25,23 @@ const deleteEmployee = async (id: string) =>
 const getEmployeeByUsername = async (username: string) =>
   await FetchAPI(`Employees?username=${username}`);
 
+const INITIAL_EMPLOYEE: IEmployee = {
+  id: "",
+  firstName: "",
+  lastName: "",
+  age: 0,
+  email: "",
+  username: "",
+  password: "",
+  review: "",
+  feedback: "",
+  isAdmin: false,
+};
 export {
   getEmployeesList,
   getEmployeeRecord,
   saveEmployee,
   deleteEmployee,
   getEmployeeByUsername,
+  INITIAL_EMPLOYEE,
 };

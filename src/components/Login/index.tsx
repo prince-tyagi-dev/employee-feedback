@@ -6,7 +6,10 @@ import enums from "../../utility/Enums";
 import { LoginContext } from "../../Contexts/LoginContexts";
 
 const Login = (): JSX.Element => {
-  const [loginFormData, setLoginFormData] = useState({} as ILogin);
+  const [loginFormData, setLoginFormData] = useState<ILogin>({
+    username: "",
+    password: "",
+  });
   const { setLoginData } = useContext(LoginContext);
 
   const handleSubmit = async (e: any) => {

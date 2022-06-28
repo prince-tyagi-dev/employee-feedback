@@ -1,5 +1,11 @@
-import { getUuid, isValid, mergeStrings, setLoginSession, getLoginSession } from "./";
-import IEmployee from "../../Interfaces/Employee";
+import {
+  getUuid,
+  isValid,
+  mergeStrings,
+  setLoginSession,
+  getLoginSession,
+} from "./";
+import { INITIAL_EMPLOYEE } from "../EmployeeManager";
 
 describe("src/utility/Common/index.ts", () => {
   beforeEach(() => {});
@@ -25,7 +31,7 @@ describe("src/utility/Common/index.ts", () => {
 
     it("setLoginSession", () => {
       expect(setLoginSession).toBeInstanceOf(Function);
-      const value = setLoginSession({} as IEmployee);
+      const value = setLoginSession(INITIAL_EMPLOYEE);
       expect(value).toEqual(undefined);
     });
 

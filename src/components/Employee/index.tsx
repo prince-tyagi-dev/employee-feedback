@@ -6,6 +6,7 @@ import {
   saveEmployee,
   deleteEmployee,
   getEmployeeByUsername,
+  INITIAL_EMPLOYEE,
 } from "../../utility/EmployeeManager";
 import "./index.css";
 import Modal from "../../components/Modal";
@@ -17,9 +18,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
   const [employees, setEmployees] = useState<IEmployee[]>([]);
   const [reviewers, setReviewers] = useState<IEmployee[]>([]);
   const [reviewForEmployees, setReviewForEmployees] = useState<IEmployee[]>([]);
-  const [employeeRecord, setEmployeeRecord] = useState<IEmployee>(
-    {} as IEmployee
-  );
+  const [employeeFormData, setEmployeeFormData] = useState<IEmployee>(INITIAL_EMPLOYEE);
   const [showModal, setShowModal] = useState(false);
   const [isEditRecord, setIsEditRecord] = useState(false);
   const [message, setMessage] = useState("");
@@ -73,7 +72,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
   // Bind the Employee current record, eg. selected Employee record to Edit Employee, Add/Edit Performance Review/Feedback.
   const bindEmployeeRecord = (id: string, isEdit: boolean) => {
     getEmployeeRecord(id).then((response) => {
-      setEmployeeRecord(response as IEmployee);
+      setEmployeeFormData(response as IEmployee);
       if (isPerformanceModule || isFeedbackModule) {
         bindEmployeesCombos(true);
       } else {
@@ -85,7 +84,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
 
   // Add module button click handler.
   const handleClickCreate = () => {
-    setEmployeeRecord({} as IEmployee);
+    setEmployeeFormData(INITIAL_EMPLOYEE);
 
     if (isPerformanceModule) {
       bindEmployeesCombos(false);
@@ -111,16 +110,16 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    await getEmployeeByUsername(employeeRecord.username).then((response) => {
+    await getEmployeeByUsername(employeeFormData.username).then((response) => {
       const emp = response as IEmployee[];
 
-      if (emp.length && employeeRecord.id !== emp[0].id) {
+      if (emp.length && employeeFormData.id !== emp[0].id) {
         setMessage(enums.msg.duplicateUsername);
       } else {
         setMessage("");
 
         // Save Employee record to the JSON Server Database.
-        saveEmployee(employeeRecord).then((response) => {
+        saveEmployee(employeeFormData).then((response) => {
           console.info("handleSubmit > response: ", response);
           setShowModal(false);
           bindEmployeesGrid();
@@ -136,8 +135,8 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
     }
 
     // Save the form fields to the Employee record.
-    setEmployeeRecord({
-      ...employeeRecord,
+    setEmployeeFormData({
+      ...employeeFormData,
       [e.target.name]:
         e.target.name === "username" || e.target.name === "email"
           ? e.target.value.toLowerCase()
@@ -275,7 +274,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
         <Modal
           title={`${
             isEditRecord
-              ? `Edit ${props.moduleName} - ` + employeeRecord.id
+              ? `Edit ${props.moduleName} - ` + employeeFormData.id
               : `Add ${props.moduleName}`
           }`}
           isOpen={showModal}
@@ -292,7 +291,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                     <input
                       type="text"
                       name="firstName"
-                      value={employeeRecord.firstName}
+                      value={employeeFormData.firstName}
                       onChange={handleChange}
                       required
                       disabled={!isEmpoloyeeModule}
@@ -303,7 +302,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                     <input
                       type="text"
                       name="lastName"
-                      value={employeeRecord.lastName}
+                      value={employeeFormData.lastName}
                       onChange={handleChange}
                       required
                       disabled={!isEmpoloyeeModule}
@@ -316,7 +315,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                     <input
                       type="number"
                       name="age"
-                      value={employeeRecord.age}
+                      value={employeeFormData.age}
                       onChange={handleChange}
                       required
                       min={18}
@@ -329,7 +328,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                     <input
                       type="email"
                       name="email"
-                      value={employeeRecord.email}
+                      value={employeeFormData.email}
                       onChange={handleChange}
                       required
                       disabled={!isEmpoloyeeModule}
@@ -342,7 +341,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                     <input
                       type="text"
                       name="username"
-                      value={employeeRecord.username}
+                      value={employeeFormData.username}
                       onChange={handleChange}
                       required
                     />
@@ -355,7 +354,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                     <input
                       type="text"
                       name="password"
-                      value={employeeRecord.password}
+                      value={employeeFormData.password}
                       onChange={handleChange}
                       required
                     />
@@ -370,7 +369,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                     <label>Review For</label>
                     <select
                       name="id"
-                      value={employeeRecord.id}
+                      value={employeeFormData.id}
                       onChange={handleChange}
                       required
                       disabled={isEditRecord || isFeedbackModule}
@@ -388,13 +387,13 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                       <label>Reviewer</label>
                       <select
                         name="reviewerId"
-                        value={employeeRecord.reviewerId}
+                        value={employeeFormData.reviewerId}
                         onChange={handleChange}
                         required
                       >
                         <option value="">Select</option>
                         {reviewers
-                          .filter((emp) => emp.id !== employeeRecord.id)
+                          .filter((emp) => emp.id !== employeeFormData.id)
                           .map((emp, index) => (
                             <option key={"rev" + emp.id + index} value={emp.id}>
                               {mergeStrings(emp.firstName, emp.lastName)}
@@ -409,7 +408,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                     <label>Performance Review</label>
                     <textarea
                       name="review"
-                      value={employeeRecord.review}
+                      value={employeeFormData.review}
                       onChange={handleChange}
                       required={isPerformanceModule || isFeedbackModule}
                       disabled={isFeedbackModule}
@@ -419,7 +418,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                     <label>Feedback</label>
                     <textarea
                       name="feedback"
-                      value={employeeRecord.feedback}
+                      value={employeeFormData.feedback}
                       onChange={handleChange}
                       required={isFeedbackModule}
                     />

@@ -20,13 +20,14 @@ import {
 import enums from "../../utility/Enums";
 import { LoginContext } from "../../Contexts/LoginContexts";
 import IEmployee from "../../Interfaces/Employee";
+import { INITIAL_EMPLOYEE } from "../../utility/EmployeeManager";
 
 function App() {
-  const [loginData, setLoginData] = useState(getLoginSession());
+  const [loginData, setLoginData] = useState<IEmployee>(getLoginSession());
 
   const handleClickLogout = () => {
     setLoginSession(null);
-    setLoginData({} as IEmployee);
+    setLoginData(INITIAL_EMPLOYEE);
     history.push("/");
   };
 

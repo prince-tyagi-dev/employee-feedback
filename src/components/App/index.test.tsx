@@ -19,8 +19,10 @@ describe("src/components/App/index.tsx", () => {
       email: "prince@gmail.com",
       username: "admin",
       password: "admin@123",
+      review: "",
+      feedback: "",
       isAdmin: true,
-    } as IEmployee;
+    };
   });
 
   test("renders learn react link", () => {
