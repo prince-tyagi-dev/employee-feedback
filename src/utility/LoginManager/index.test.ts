@@ -1,15 +1,15 @@
 import { getEmployeeByCredentials, processLogin } from "./";
 import FetchAPI from "../../utility/FetchAPI";
 import IEmployee from "../../Interfaces/Employee";
-import { IKeyValuePair, ILogin } from "../../Interfaces/Common";
+import { ILogin } from "../../Interfaces/Common";
 
 jest.mock("../../utility/FetchAPI");
 
 describe("src/utility/LoginManager/index.ts", () => {
   let mockFetch: any;
   let employee: IEmployee;
-  let props: IKeyValuePair;
   let loginData: ILogin;
+  let setLoginData: Function;
 
   beforeEach(() => {
     mockFetch = FetchAPI;
@@ -23,8 +23,8 @@ describe("src/utility/LoginManager/index.ts", () => {
       password: "admin@123",
       isAdmin: true,
     } as IEmployee;
-    props = { loginCallBack: jest.fn() };
     loginData = { username: "username", password: "password" };
+    setLoginData = jest.fn();
   });
 
   describe("getEmployeeByCredentials", () => {
@@ -43,7 +43,7 @@ describe("src/utility/LoginManager/index.ts", () => {
       mockFetch.mockImplementation(() => {
         return Promise.resolve([employee]);
       });
-      const value = await processLogin(props, loginData);
+      const value = await processLogin(loginData, setLoginData);
       expect(value).not.toEqual(null);
     });
   });

@@ -1,19 +1,5 @@
-import {
-  getUuid,
-  isValid,
-  mergeStrings,
-  setLoginInfo,
-  getLoginInfo,
-  getModuleName,
-} from "./";
+import { getUuid, isValid, mergeStrings, setLoginSession, getLoginSession } from "./";
 import IEmployee from "../../Interfaces/Employee";
-import {
-  EMPLOYEE,
-  FEEDBACK,
-  HOME,
-  LOGOUT,
-  PERFORMANCE_REVIEW,
-} from "../Modules";
 
 describe("src/utility/Common/index.ts", () => {
   beforeEach(() => {});
@@ -37,42 +23,17 @@ describe("src/utility/Common/index.ts", () => {
       expect(value).toEqual("FirstName LastName");
     });
 
-    it("setLoginInfo", () => {
-      expect(setLoginInfo).toBeInstanceOf(Function);
-      const value = setLoginInfo({} as IEmployee);
+    it("setLoginSession", () => {
+      expect(setLoginSession).toBeInstanceOf(Function);
+      const value = setLoginSession({} as IEmployee);
       expect(value).toEqual(undefined);
     });
 
     // Will check this later due to getting the error in the App.test.tsx file.
-    it("getLoginInfo", () => {
-      expect(getLoginInfo).toBeInstanceOf(Function);
-      const value = getLoginInfo();
+    it("getLoginSession", () => {
+      expect(getLoginSession).toBeInstanceOf(Function);
+      const value = getLoginSession();
       expect(value).toEqual({});
-    });
-    it("getModuleName for Home", () => {
-      expect(getModuleName).toBeInstanceOf(Function);
-      const value = getModuleName();
-      expect(value).toEqual(HOME);
-    });
-    it("getModuleName for Logout", () => {
-      expect(getModuleName).toBeInstanceOf(Function);
-      const value = getModuleName("htp://localhost:3000");
-      expect(value).toEqual(LOGOUT);
-    });
-    it("getModuleName for Employee", () => {
-      expect(getModuleName).toBeInstanceOf(Function);
-      const value = getModuleName("htp://localhost:3000/employee");
-      expect(value).toEqual(EMPLOYEE);
-    });
-    it("getModuleName for Review", () => {
-      expect(getModuleName).toBeInstanceOf(Function);
-      const value = getModuleName("htp://localhost:3000/review");
-      expect(value).toEqual(PERFORMANCE_REVIEW);
-    });
-    it("getModuleName for Feedback", () => {
-      expect(getModuleName).toBeInstanceOf(Function);
-      const value = getModuleName("htp://localhost:3000/feedback");
-      expect(value).toEqual(FEEDBACK);
     });
   });
 });

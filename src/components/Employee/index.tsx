@@ -9,7 +9,7 @@ import {
 } from "../../utility/EmployeeManager";
 import "./index.css";
 import Modal from "../../components/Modal";
-import { getLoginInfo, isValid, mergeStrings } from "../../utility/Common";
+import { getLoginSession, isValid, mergeStrings } from "../../utility/Common";
 import { IKeyValuePair } from "../../Interfaces/Common";
 import enums from "../../utility/Enums";
 
@@ -27,7 +27,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
   const isEmpoloyeeModule = props.moduleName === "Employee";
   const isPerformanceModule = props.moduleName === "Performance Review";
   const isFeedbackModule = props.moduleName === "Feedback";
-  const loginEmployee = getLoginInfo();
+  const loginEmployee = getLoginSession();
 
   // Bind the Employees grid.
   const bindEmployeesGrid = useCallback(() => {

@@ -1,16 +1,16 @@
 import { render, screen } from "@testing-library/react";
 import App from "./";
 import enums from "../../utility/Enums";
-import { getLoginInfo } from "../../utility/Common/";
+import { getLoginSession } from "../../utility/Common/";
 import IEmployee from "../../Interfaces/Employee";
 jest.mock("../../utility/Common/");
 
 describe("src/components/App/index.tsx", () => {
-  let mockGetLoginInfo: any;
+  let mockgetLoginSession: any;
   let employee: IEmployee;
 
   beforeEach(() => {
-    mockGetLoginInfo = getLoginInfo;
+    mockgetLoginSession = getLoginSession;
     employee = {
       id: "1234567",
       firstName: "Prince",
@@ -29,11 +29,11 @@ describe("src/components/App/index.tsx", () => {
     expect(linkElement).toBeInTheDocument();
   });
 
-  describe("setLoginInfo", () => {
+  describe("setLoginSession", () => {
     it("Login with the Admin", () => {
-      expect(mockGetLoginInfo).toBeInstanceOf(Function);
+      expect(mockgetLoginSession).toBeInstanceOf(Function);
 
-      mockGetLoginInfo.mockImplementation(() => {
+      mockgetLoginSession.mockImplementation(() => {
         return employee;
       });
       render(<App />);
@@ -42,9 +42,9 @@ describe("src/components/App/index.tsx", () => {
     });
 
     it("Login with the Employee", () => {
-      expect(mockGetLoginInfo).toBeInstanceOf(Function);
+      expect(mockgetLoginSession).toBeInstanceOf(Function);
 
-      mockGetLoginInfo.mockImplementation(() => {
+      mockgetLoginSession.mockImplementation(() => {
         return { ...employee, isAdmin: false };
       });
       render(<App />);

@@ -1,19 +1,21 @@
-import { useState } from "react";
-import { ILogin, ILoginProps } from "../../Interfaces/Common";
+import { useContext, useState } from "react";
+import { ILogin } from "../../Interfaces/Common";
 import { processLogin } from "../../utility/LoginManager";
 import "./index.css";
 import enums from "../../utility/Enums";
+import { LoginContext } from "../../Contexts/LoginContexts";
 
-const Login = (props: ILoginProps): JSX.Element => {
-  const [loginData, setLoginData] = useState({} as ILogin);
+const Login = (): JSX.Element => {
+  const [loginFormData, setLoginFormData] = useState({} as ILogin);
+  const { setLoginData } = useContext(LoginContext);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    processLogin(props, loginData);
+    processLogin(loginFormData, setLoginData);
   };
 
   const handleChange = (e: any) => {
-    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+    setLoginFormData({ ...loginFormData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -25,7 +27,7 @@ const Login = (props: ILoginProps): JSX.Element => {
             type="text"
             name="username"
             placeholder="Enter the username"
-            value={loginData.username}
+            value={loginFormData.username}
             onChange={handleChange}
             required
           />
@@ -37,7 +39,7 @@ const Login = (props: ILoginProps): JSX.Element => {
             type="password"
             name="password"
             placeholder="Enter the password"
-            value={loginData.password}
+            value={loginFormData.password}
             onChange={handleChange}
             required
           />

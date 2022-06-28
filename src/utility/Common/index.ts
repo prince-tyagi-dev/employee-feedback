@@ -1,11 +1,4 @@
 import IEmployee from "../../Interfaces/Employee";
-import {
-  EMPLOYEE,
-  FEEDBACK,
-  HOME,
-  LOGOUT,
-  PERFORMANCE_REVIEW,
-} from "../Modules";
 
 // Return a unique number, eg. it can be used as the unique id.
 const getUuid = (): number => {
@@ -21,35 +14,13 @@ const isValid = (value: string): boolean => {
 const mergeStrings = (...strings: string[]): string => strings.join(" ");
 
 // Set the login information to the Session Storage.
-const setLoginInfo = (employee?: IEmployee | null) => {
+const setLoginSession = (employee?: IEmployee | null) => {
   sessionStorage.setItem("LOGINUSER", JSON.stringify(employee));
 };
 
 // Get the login information from the Session Storage.
-const getLoginInfo = (): IEmployee => {
-  return JSON.parse(sessionStorage.getItem("LOGINUSER") || "{}");
+const getLoginSession = (): IEmployee => {
+  return JSON.parse(sessionStorage.getItem("LOGINUSER") || "{}") as IEmployee;
 };
 
-// Get the module name from the requesting url.
-const getModuleName = (requestUrl?: string): string => {
-  const url = requestUrl || window.location.href;
-
-  return url.indexOf("employee") !== -1
-    ? EMPLOYEE
-    : url.indexOf("review") !== -1
-    ? PERFORMANCE_REVIEW
-    : url.indexOf("feedback") !== -1
-    ? FEEDBACK
-    : url.endsWith("/")
-    ? HOME
-    : LOGOUT;
-};
-
-export {
-  getUuid,
-  isValid,
-  mergeStrings,
-  setLoginInfo,
-  getLoginInfo,
-  getModuleName,
-};
+export { getUuid, isValid, mergeStrings, setLoginSession, getLoginSession };

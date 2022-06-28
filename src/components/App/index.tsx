@@ -3,116 +3,110 @@ import Employee from "../Employee";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Login from "../Login";
 import {
-  getLoginInfo,
-  getModuleName,
+  getLoginSession,
   mergeStrings,
-  setLoginInfo,
+  setLoginSession,
 } from "../../utility/Common";
 import Home from "../Home";
 import { useState } from "react";
 import history from "../../utility/History";
-import { LOGOUT } from "../../utility/Modules";
+import {
+  EMPLOYEE,
+  FEEDBACK,
+  HOME,
+  LOGOUT,
+  PERFORMANCE_REVIEW,
+} from "../../utility/Modules";
 import enums from "../../utility/Enums";
+import { LoginContext } from "../../Contexts/LoginContexts";
+import IEmployee from "../../Interfaces/Employee";
 
 function App() {
-  const [moduleName, setModuleName] = useState(getModuleName());
+  const [loginData, setLoginData] = useState(getLoginSession());
 
   const handleClickLogout = () => {
-    setLoginInfo(null);
-    setModuleName(LOGOUT);
+    setLoginSession(null);
+    setLoginData({} as IEmployee);
     history.push("/");
   };
-  const handleClickLink = (e: any) => {
-    const moduleName = getModuleName(e.target.href);
-    setModuleName(moduleName);
-  };
-
-  let employee = getLoginInfo();
 
   return (
-    <Router>
-      <div className="nav">
-        <input type="checkbox" id="nav-check" />
-        <div className="nav-header">
-          <div className="nav-title">{enums.msg.appHeaderTitle}</div>
-          <span>
-            {employee?.username
-              ? `Login by "${mergeStrings(
-                  employee.firstName,
-                  employee.lastName
-                )}" as ${employee.isAdmin ? "Admin" : "Employee"}`
-              : ""}
-          </span>
-        </div>
-        {employee?.username ? (
-          <>
-            <div className="nav-btn">
-              <label htmlFor="nav-check">
-                <span></span>
-                <span></span>
-                <span></span>
-              </label>
-            </div>
-            <div className="nav-links">
-              <Link to="/">Home</Link>
-              {employee.isAdmin ? (
-                <>
-                  <Link to="/employee" onClick={handleClickLink}>
-                    Employee
-                  </Link>
-                  <Link to="/review" onClick={handleClickLink}>
-                    Performance Review
-                  </Link>
-                </>
-              ) : (
-                // Employee view
-                <Link to="/feedback" onClick={handleClickLink}>
-                  Feedback
-                </Link>
-              )}
-              <Link to="/" onClick={handleClickLogout} className="btn-logout">
-                Logout
-              </Link>
-            </div>
-          </>
-        ) : null}
-      </div>
-
-      <div className="app-container">
-        <Routes>
-          {employee?.username ? (
+    <LoginContext.Provider value={{ loginData, setLoginData }}>
+      <Router>
+        <div className="nav">
+          <input type="checkbox" id="nav-check" />
+          <div className="nav-header">
+            <div className="nav-title">{enums.msg.appHeaderTitle}</div>
+            <span>
+              {loginData?.username
+                ? `Login by "${mergeStrings(
+                    loginData.firstName,
+                    loginData.lastName
+                  )}" as ${loginData.isAdmin ? "Admin" : "Employee"}`
+                : ""}
+            </span>
+          </div>
+          {loginData?.username ? (
             <>
-              <Route path="/" element={<Home user={employee} />} />
-
-              {/* Admin view */}
-              {employee.isAdmin ? (
-                <>
-                  <Route
-                    path="/employee"
-                    element={<Employee moduleName={moduleName} />}
-                  />
-                  <Route
-                    path="/review"
-                    element={<Employee moduleName={moduleName} />}
-                  />
-                </>
-              ) : (
-                //  Employee view
-                <Route
-                  path="/feedback"
-                  element={<Employee moduleName={moduleName} />}
-                />
-              )}
+              <div className="nav-btn">
+                <label htmlFor="nav-check">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </label>
+              </div>
+              <div className="nav-links">
+                <Link to="/">{HOME}</Link>
+                {loginData.isAdmin ? (
+                  <>
+                    <Link to="/employee">{EMPLOYEE}</Link>
+                    <Link to="/review">{PERFORMANCE_REVIEW}</Link>
+                  </>
+                ) : (
+                  // Employee view
+                  <Link to="/feedback">{FEEDBACK}</Link>
+                )}
+                <Link to="/" onClick={handleClickLogout} className="btn-logout">
+                  {LOGOUT}
+                </Link>
+              </div>
             </>
-          ) : (
-            <Route
-              path="/"
-              element={<Login loginCallBack={handleClickLink} />}
-            />
-          )}
-        </Routes>
-      </div>
-    </Router>
+          ) : null}
+        </div>
+
+        <div className="app-container">
+          <Routes>
+            {loginData?.username ? (
+              <>
+                <Route path="/" element={<Home />} />
+
+                {/* Admin view */}
+                {loginData.isAdmin ? (
+                  <>
+                    <Route
+                      path="/employee"
+                      element={<Employee moduleName={EMPLOYEE} />}
+                    />
+                    <Route
+                      path="/review"
+                      element={<Employee moduleName={PERFORMANCE_REVIEW} />}
+                    />
+                  </>
+                ) : (
+                  //  Employee view
+                  <Route
+                    path="/feedback"
+                    element={<Employee moduleName={FEEDBACK} />}
+                  />
+                )}
+              </>
+            ) : (
+              <Route path="/" element={<Login />} />
+            )}
+          </Routes>
+        </div>
+      </Router>
+    </LoginContext.Provider>
   );
 }
 
