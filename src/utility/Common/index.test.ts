@@ -39,7 +39,7 @@ describe("src/utility/Common/index.ts", () => {
     it("getLoginSession", () => {
       expect(getLoginSession).toBeInstanceOf(Function);
       const value = getLoginSession();
-      expect(value).toEqual({});
+      expect(value).toEqual(INITIAL_EMPLOYEE);
     });
   });
 });
