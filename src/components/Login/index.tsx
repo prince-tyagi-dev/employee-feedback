@@ -20,6 +20,7 @@ const Login = (): JSX.Element => {
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
+      <h1>Login</h1>
       <h4>{enums.msg.loginSteps}</h4>
       <div className="row">
         <div className="column">
