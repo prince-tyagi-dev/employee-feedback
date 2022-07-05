@@ -30,7 +30,6 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
 
   // Bind the Employees grid.
   const bindEmployeesGrid = useCallback(() => {
-    console.info("useCallback hook render");
     getEmployeesList().then((response) => {
       const employeesArray = response as IEmployee[];
 
@@ -52,7 +51,6 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
 
   useEffect(() => {
     bindEmployeesGrid();
-    console.info("useEffect hook render");
   }, [bindEmployeesGrid]);
 
   // Bind the Employees combos.
@@ -120,7 +118,6 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
 
         // Save Employee record to the JSON Server Database.
         saveEmployee(employeeFormData).then((response) => {
-          console.info("handleSubmit > response: ", response);
           setShowModal(false);
           bindEmployeesGrid();
         });

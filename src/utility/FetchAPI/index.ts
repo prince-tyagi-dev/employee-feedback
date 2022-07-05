@@ -8,7 +8,7 @@ const FetchAPI = async (url: string, params?: {}) => {
     .then((response) => response.json())
     .then((data) => (returnData = data))
     .catch((err) => {
-      console.info(err);
+      console.error(err);
     });
   return returnData;
 };
