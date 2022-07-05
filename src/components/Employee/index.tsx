@@ -352,7 +352,7 @@ const Employee = (props: IKeyValuePair): JSX.Element => {
                   <div className="column">
                     <label>Password</label>
                     <input
-                      type="text"
+                      type="password"
                       name="password"
                       value={employeeFormData.password}
                       onChange={handleChange}
